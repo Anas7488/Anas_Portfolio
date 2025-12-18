@@ -4,27 +4,40 @@ import ScrollFade from './ScrollFade';
 
 const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [transmissionLog, setTransmissionLog] = useState<string[]>([]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setTransmissionLog(["Initializing secure uplink...", "Encrypting data packets..."]);
     
     const formData = new FormData(e.currentTarget);
     const identity = formData.get('identity') as string;
     const email = formData.get('email') as string;
     const message = formData.get('message') as string;
 
-    // Construct the mailto URL
-    // Subject and Body are URL encoded to handle spaces and special characters
-    const subject = encodeURIComponent(`Portfolio Inquiry from ${identity}`);
-    const body = encodeURIComponent(`Sender: ${identity} (${email})\n\nMessage:\n${message}`);
+    // Detailed subject and body for a professional Outlook response
+    const subject = encodeURIComponent(`PORTFOLIO SECURE MESSAGE: ${identity}`);
+    const body = encodeURIComponent(
+      `--- SECURE TRANSMISSION START ---\n` +
+      `FROM: ${identity}\n` +
+      `REPLY_TO: ${email}\n` +
+      `TIMESTAMP: ${new Date().toISOString()}\n\n` +
+      `MESSAGE_BODY:\n${message}\n\n` +
+      `--- END OF PACKET ---`
+    );
+
     const mailtoUrl = `mailto:Anasshaikh@outlook.com?subject=${subject}&body=${body}`;
 
-    // Simulate the "futuristic" encryption process before sending
+    // Faster sequence: 800ms total
     setTimeout(() => {
-      window.location.href = mailtoUrl;
-      setIsSubmitting(false);
-    }, 1200);
+      setTransmissionLog(prev => [...prev, "Bypassing firewall...", "Handshake successful."]);
+      setTimeout(() => {
+        window.location.href = mailtoUrl;
+        setIsSubmitting(false);
+        setTransmissionLog([]);
+      }, 400);
+    }, 400);
   };
 
   return (
@@ -45,8 +58,8 @@ const Contact: React.FC = () => {
                 </svg>
               </div>
               <div>
-                <div className="text-[10px] text-slate-600 mono uppercase">Send Message to</div>
-                <div className="text-slate-200 font-bold text-sm">Anas shaikh</div>
+                <div className="text-[10px] text-slate-600 mono uppercase">Direct_Line</div>
+                <div className="text-slate-200 font-bold text-sm">Anasshaikh@outlook.com</div>
               </div>
             </a>
 
@@ -59,7 +72,7 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <div className="text-[10px] text-slate-600 mono uppercase">Professional_Network</div>
-                <div className="text-slate-200 font-bold text-sm">anas-sheikh</div>
+                <div className="text-slate-200 font-bold text-sm">anas-sheikh-42373a329</div>
               </div>
             </a>
 
@@ -72,7 +85,7 @@ const Contact: React.FC = () => {
               </div>
               <div>
                 <div className="text-[10px] text-slate-600 mono uppercase">Codebase_Repository</div>
-                <div className="text-slate-200 font-bold text-sm">Anas</div>
+                <div className="text-slate-200 font-bold text-sm">Anas7488</div>
               </div>
             </a>
           </div>
@@ -85,14 +98,14 @@ const Contact: React.FC = () => {
               type="text" 
               required
               placeholder="Identity" 
-              className="w-full bg-slate-900/50 border border-slate-800 rounded-lg p-3 text-sm focus:border-cyan-500/50 outline-none transition-colors" 
+              className="w-full bg-slate-900/50 border border-slate-800 rounded-lg p-3 text-sm focus:border-cyan-500/50 outline-none transition-colors text-white" 
             />
             <input 
               name="email"
               type="email" 
               required
               placeholder="Contact_URI" 
-              className="w-full bg-slate-900/50 border border-slate-800 rounded-lg p-3 text-sm focus:border-cyan-500/50 outline-none transition-colors" 
+              className="w-full bg-slate-900/50 border border-slate-800 rounded-lg p-3 text-sm focus:border-cyan-500/50 outline-none transition-colors text-white" 
             />
           </div>
           <textarea 
@@ -100,20 +113,35 @@ const Contact: React.FC = () => {
             required
             placeholder="Mission_Parameters (Describe your project or data challenge...)" 
             rows={4} 
-            className="w-full bg-slate-900/50 border border-slate-800 rounded-lg p-3 text-sm focus:border-cyan-500/50 outline-none resize-none transition-colors"
+            className="w-full bg-slate-900/50 border border-slate-800 rounded-lg p-3 text-sm focus:border-cyan-500/50 outline-none resize-none transition-colors text-white"
           ></textarea>
           <button 
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white rounded-lg font-bold transition-all shadow-lg text-sm active:scale-95 disabled:opacity-50"
+            className="w-full py-3 bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-500 hover:to-blue-600 text-white rounded-lg font-bold transition-all shadow-lg text-sm active:scale-95 disabled:opacity-50 relative overflow-hidden group cursor-none"
           >
-            {isSubmitting ? 'ENCRYPTING PACKET...' : 'TRANSMIT ENCRYPTED DATA'}
+            <span className={isSubmitting ? "opacity-0" : "opacity-100"}>TRANSMIT ENCRYPTED DATA</span>
+            {isSubmitting && (
+              <div className="absolute inset-0 flex items-center justify-center bg-cyan-600">
+                <div className="flex gap-1">
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></div>
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:0.1s]"></div>
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                </div>
+              </div>
+            )}
           </button>
           
           {isSubmitting && (
-            <p className="text-[10px] text-cyan-400 mono animate-pulse text-center">
-              SECURE HANDSHAKE INITIATED... OPENING OUTLOOK CLIENT
-            </p>
+            <div className="mt-4 p-3 bg-slate-950/80 border border-cyan-500/20 rounded-lg mono text-[10px] text-cyan-400 space-y-1">
+              {transmissionLog.map((log, i) => (
+                <div key={i} className="flex gap-2">
+                  <span className="opacity-50">[{i+1}]</span>
+                  <span>{log}</span>
+                </div>
+              ))}
+              <div className="animate-pulse">_CURSOR_IDLE_BYPASS_ACTIVE...</div>
+            </div>
           )}
         </form>
       </ScrollFade>

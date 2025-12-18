@@ -44,7 +44,7 @@ const ScrollFade: React.FC<ScrollFadeProps> = ({ children, className = "" }) => 
   return (
     <div 
       ref={sectionRef} 
-      className={`transition-all duration-500 ease-out ${className}`}
+      className={`transition-all duration-700 ease-out ${className}`}
       style={{ opacity, transform }}
     >
       {children}
